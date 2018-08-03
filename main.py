@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 if __name__ == "__main__":
-    origin = PreProcess.read_image("test_img/test.png", color_code=cv.IMREAD_ANYCOLOR)
+    origin = PreProcess.read_image("test_img/timg.jpg", color_code=cv.IMREAD_ANYCOLOR)
     origin = PreProcess.resize_img(origin)
     img = PreProcess.convert_color(origin)
     if img is not None:
