@@ -1,9 +1,9 @@
 import cv2 as cv
 import numpy as np
-import pandas as pd
+from matplotlib import cm
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
+
 
 def read_image(path, color_code=cv.IMREAD_GRAYSCALE):
     """
@@ -90,8 +90,8 @@ def center_avg_imp(img, ksize=10, flag=False):
 
     for x in range(0, img.shape[0], ksize):
         for y in range(0, img.shape[1], ksize):
-            new_img[x:x+ksize, y:y+ksize] =\
-                img[x:x+ksize, y:y+ksize] * (avg / np.average(img[x:x+ksize, y:y+ksize]))
+            new_img[x:x + ksize, y:y + ksize] = \
+                img[x:x + ksize, y:y + ksize] * (avg / np.average(img[x:x + ksize, y:y + ksize]))
     # img = cv.medianBlur(img, 3)
     if flag:
         plt.subplot(1, 2, 1)
@@ -201,7 +201,7 @@ def binary_image(img, thresh=0.15, flag=False):
     """
     t = np.reshape(img, img.shape[1] * img.shape[0])
     pixel = np.bincount(t)
-    xdata = np.linspace(1,pixel.shape[0],pixel.shape[0])
+    xdata = np.linspace(1, pixel.shape[0], pixel.shape[0])
     index = np.argwhere(pixel == np.max(pixel))
     thresh = index[0][0] / 3
     plt.plot(pixel)
@@ -270,9 +270,9 @@ def get_area_pos(img, filter_size=1000, flag=False):
             result_list.append((area, x, y, w, h))
             if flag:
                 temp_img = np.zeros(image.shape)
-                temp_img = cv.drawContours(temp_img, con, -1,255)
-                print('x:%d，y:%d，w:%d，h:%d' % (x,y,w,h))
-                temp_img = cv.rectangle(temp_img, (x, y), (x+w, y+h), 180)
+                temp_img = cv.drawContours(temp_img, con, -1, 255)
+                print('x:%d，y:%d，w:%d，h:%d' % (x, y, w, h))
+                temp_img = cv.rectangle(temp_img, (x, y), (x + w, y + h), 180)
                 cv.imshow("result", temp_img)
                 cv.waitKey()
     return result_list
