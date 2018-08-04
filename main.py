@@ -4,8 +4,10 @@ from matplotlib import pyplot as plt
 
 import PreProcess
 import RegionGrow
+import time
 
 if __name__ == "__main__":
+    start_time = time.time()
     origin = PreProcess.read_image("test_img/ceshi1.jpg", color_code=cv.IMREAD_ANYCOLOR)
     origin = PreProcess.resize_img(origin)
     img = PreProcess.convert_color(origin)
@@ -43,3 +45,5 @@ if __name__ == "__main__":
         plt.imshow(origin)
         plt.title("识别结果")
         plt.show()
+        end_time = time.time()
+        print("run in %.2f" % (end_time - start_time))
