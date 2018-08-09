@@ -7,21 +7,22 @@ import RegionGrow
 import time
 
 if __name__ == "__main__":
-    start_time = time.time()
-    origin = PreProcess.read_image("test_img/ceshi1.jpg", color_code=cv.IMREAD_ANYCOLOR)
+
+    origin = PreProcess.read_image("test_img/timg.jpg", color_code=cv.IMREAD_ANYCOLOR)
     origin = PreProcess.resize_img(origin)
     img = PreProcess.convert_color(origin)
     if img is not None:
         img = PreProcess.equalize_hist(img, flag=False)
         img = PreProcess.center_avg_imp(img, ksize=20, flag=False)
         img = PreProcess.med_blur(img, ksize=5, flag=False)
-        plt.imshow(img, cmap='gray')
-        plt.show()
+        start_time = time.time()
         rg = RegionGrow.RegionGrow(img)
         rg.img_cut()
         rg.min_pos()
-        rg.region_grow()
-        img = rg.im_merge()
+        img = rg.region_grow()
+        end_time = time.time()
+        print("run in %.2f" % (end_time - start_time))
+        # img = rg.im_merge()
         plt.imshow(img, cmap="gray")
         plt.show()
         # img = PreProcess.binary_image(img, 100, True)
@@ -45,5 +46,3 @@ if __name__ == "__main__":
         plt.imshow(origin)
         plt.title("识别结果")
         plt.show()
-        end_time = time.time()
-        print("run in %.2f" % (end_time - start_time))
