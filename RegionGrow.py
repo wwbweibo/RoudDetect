@@ -5,7 +5,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 import DataTool
 
-
 class RegionGrow:
     def __init__(self, image):
         """
@@ -15,7 +14,6 @@ class RegionGrow:
         self.image = image
         self.imlist = []
         self.poslist = []
-        self.temp_imlist = []
         self.retimg = np.zeros(shape=self.image.shape)
         self.imh, self.imw = image.shape
         self.block_w = 0
@@ -32,11 +30,14 @@ class RegionGrow:
         """
         for x in range(9):
             point = self.poslist[x]
-            timblock = self.temp_imlist[x]
+            timblock = np.zeros(shape= self.image.shape)
             if point is None:
                 continue
             # the position of the seed
             start_point = (point[0], point[1])
+            # if the start point is nonzero, skip this point
+            if self.retimg[start_point[0], start_point[1]] != 0:
+                continue
             # the stack of point which need to be visited
             point_list = [start_point]
             # the dict of visited point
@@ -60,6 +61,9 @@ class RegionGrow:
                                 visited_point[new_point] = new_point
                         except:
                             print(new_point)
+            self.im_merge2(timblock)
+        self.retimg = self.retimg != 0
+        return self.retimg
 
     def img_cut(self):
         """
@@ -73,7 +77,6 @@ class RegionGrow:
             for j in range(3):
                 self.imlist.append(self.image[i * self.block_h:(i + 1) * self.block_h,
                                               j * self.block_w: (j + 1) * self.block_w])
-                self.temp_imlist.append(np.zeros(shape=(self.imh, self.imw)))
         return self.imlist
 
     def min_pos(self):
@@ -103,10 +106,5 @@ class RegionGrow:
             block_index += 1
         return self.poslist
 
-    def im_merge(self):
-        for tim in self.temp_imlist:
-            self.retimg = np.add(self.retimg, tim)
-        self.retimg = self.retimg != 0
-        self.retimg.dtype = np.uint8
-        self.retimg = self.retimg * 255
-        return self.retimg
+    def im_merge2(self, temp_img):
+        self.retimg = np.add(temp_img, self.retimg)

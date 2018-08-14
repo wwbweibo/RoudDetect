@@ -19,8 +19,8 @@ if __name__ == "__main__":
         rg = RegionGrow.RegionGrow(img)
         rg.img_cut()
         rg.min_pos()
-        rg.region_grow()
-        img = rg.im_merge()
+        img = rg.region_grow()
+
         end_time = time.time()
         print("run in %.2f" % (end_time - start_time))
         # img = rg.im_merge()
