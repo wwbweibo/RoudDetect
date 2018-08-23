@@ -276,3 +276,18 @@ def get_area_pos(img, filter_size=1000, flag=False):
                 cv.imshow("result", temp_img)
                 cv.waitKey()
     return result_list
+
+
+def hist_segmentation(img):
+    """
+    do image segmentation using hist
+    :type img: gray image
+    :param img: origin image
+    :return: image after segmentation
+    """
+    hist = cv.calcHist([img], [0], None, [256], [0, 255])
+    max_index = np.where(hist == max(hist))
+    mask = hist[0:max_index[0][0]]
+    min_index = np.where(mask == min(mask))
+    ret, new_im = cv.threshold(img, min_index[0][0], 255, cv.THRESH_BINARY)
+    return new_im
