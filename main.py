@@ -1,10 +1,11 @@
 # coding:utf-8
+import time
+
 import cv2 as cv
 from matplotlib import pyplot as plt
 
 import PreProcess
 import RegionGrow
-import time
 
 if __name__ == "__main__":
 
@@ -12,7 +13,7 @@ if __name__ == "__main__":
     origin = PreProcess.resize_img(origin)
     img = PreProcess.convert_color(origin)
     if img is not None:
-        img = PreProcess.equalize_hist(img, flag=False)
+        img = PreProcess.equalize_hist(img, flag=True)
         img = PreProcess.center_avg_imp(img, ksize=20, flag=False)
         img = PreProcess.med_blur(img, ksize=5, flag=False)
         start_time = time.time()
@@ -28,6 +29,7 @@ if __name__ == "__main__":
         plt.show()
         # img = PreProcess.binary_image(img, 100, True)
         img = PreProcess.med_blur(img, ksize=3, flag=False)
+        # img = cv.dilate(img, np.array([[1,1,1],[1,1,1],[1,1,1]]))
         result, imgs = PreProcess.connected_region_label(img, flag=False)
         for img in imgs[1:]:
             area_result = PreProcess.get_area_pos(img, flag=False)

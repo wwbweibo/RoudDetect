@@ -1,5 +1,5 @@
-import numpy as np
 import math
+
 
 def distance_calc(point1, point2):
     """
@@ -25,7 +25,7 @@ def min_distace(pointlist, center):
 
     # for all the point calculate distance
     for index in range(len(pointlist[0])):
-        pt = (pointlist[0][index],pointlist[1][index])
+        pt = (pointlist[0][index], pointlist[1][index])
         dis = distance_calc(pt, center)
         dis_dict[dis] = pt
         dis_list.append(dis)

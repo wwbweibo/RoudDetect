@@ -2,8 +2,9 @@
 to do image segmentation using region grow method
 """
 import numpy as np
-from matplotlib import pyplot as plt
+
 import DataTool
+
 
 class RegionGrow:
     def __init__(self, image):
@@ -30,7 +31,7 @@ class RegionGrow:
         """
         for x in range(9):
             point = self.poslist[x]
-            timblock = np.zeros(shape= self.image.shape)
+            timblock = np.zeros(shape=self.image.shape)
             if point is None:
                 continue
             # the position of the seed
@@ -55,7 +56,8 @@ class RegionGrow:
                             continue
                         try:
                             if 0 <= new_point[0] < self.imh and 0 <= new_point[1] < self.imw and np.abs(
-                                    self.image[new_point[0], new_point[1]] - self.image[start_point[0], start_point[1]]) < 25:
+                                    self.image[new_point[0], new_point[1]] - self.image[
+                                        start_point[0], start_point[1]]) < 40:
                                 timblock[new_point[0], new_point[1]] = 255
                                 point_list.append(new_point)
                                 visited_point[new_point] = new_point
@@ -76,7 +78,7 @@ class RegionGrow:
         for i in range(3):
             for j in range(3):
                 self.imlist.append(self.image[i * self.block_h:(i + 1) * self.block_h,
-                                              j * self.block_w: (j + 1) * self.block_w])
+                                   j * self.block_w:(j + 1) * self.block_w])
         return self.imlist
 
     def min_pos(self):
@@ -98,7 +100,7 @@ class RegionGrow:
             # todo using a more useful method to chose the seed
             # No.1 chose the point which is closest to center point
             # pick a point randomly and convert to global position
-            center = (int(self.block_h/2),int(self.block_w / 2))    # center point
+            center = (int(self.block_h / 2), int(self.block_w / 2))  # center point
             pt = DataTool.min_distace(posarr, center)
             posw = int(block_index % 3) * self.block_w + pt[1]
             posh = int(block_index / 3) * self.block_h + pt[0]
