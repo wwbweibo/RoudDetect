@@ -1,19 +1,22 @@
 # coding:utf-8
 import time
-
+import Feature
 import cv2 as cv
 from matplotlib import pyplot as plt
+import numpy as np
+
 
 import PreProcess
 import RegionGrow
 
 if __name__ == "__main__":
 
-    origin = PreProcess.read_image("test_img/timg.jpg", color_code=cv.IMREAD_ANYCOLOR)
+    origin = PreProcess.read_image("test_img/ceshi1.jpg", color_code=cv.IMREAD_ANYCOLOR)
     origin = PreProcess.resize_img(origin)
+    print(origin.shape)
     img = PreProcess.convert_color(origin)
     if img is not None:
-        img = PreProcess.equalize_hist(img, flag=True)
+        img = PreProcess.equalize_hist(img, flag=False)
         img = PreProcess.center_avg_imp(img, ksize=20, flag=False)
         img = PreProcess.med_blur(img, ksize=5, flag=False)
         start_time = time.time()
@@ -29,10 +32,11 @@ if __name__ == "__main__":
         plt.show()
         # img = PreProcess.binary_image(img, 100, True)
         img = PreProcess.med_blur(img, ksize=3, flag=False)
+        plt.imsave("a.jpg",img,cmap='gray')
         # img = cv.dilate(img, np.array([[1,1,1],[1,1,1],[1,1,1]]))
-        result, imgs = PreProcess.connected_region_label(img, flag=False)
+        result, imgs = Feature.connected_region_label(img, flag=False)
         for img in imgs[1:]:
-            area_result = PreProcess.get_area_pos(img, flag=False)
+            area_result = Feature.get_area_pos(img, flag=False)
             for r in area_result:
                 origin = cv.rectangle(origin,
                                       (r[1], r[2]),
@@ -49,3 +53,4 @@ if __name__ == "__main__":
         plt.imshow(origin)
         plt.title("识别结果")
         plt.show()
+        plt.imsave( "b.jpg",origin)
