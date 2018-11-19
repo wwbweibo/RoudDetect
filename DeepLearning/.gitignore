@@ -6,3 +6,5 @@ train/
 models/
 *ipynb 
 logs/
+image.zip
+images/

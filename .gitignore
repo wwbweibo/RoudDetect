@@ -1,4 +1,6 @@
+.vscode/
 .idea/
+.ipynb_checkpoints/
 __pycache__/
 cpp/
 log/
