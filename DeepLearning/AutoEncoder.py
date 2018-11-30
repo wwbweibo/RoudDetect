@@ -1,18 +1,12 @@
 import cv2
 import keras.backend as K
-import keras.utils
 import numpy as np
 from keras.layers import Conv2D, Dense, Dropout, Flatten, Input, MaxPool2D, UpSampling2D, AveragePooling2D
 from keras.layers import BatchNormalization, Activation, Lambda
 from keras.layers.merge import Add
-from keras.layers.advanced_activations import ThresholdedReLU
-from keras.losses import categorical_crossentropy
 from keras.callbacks import TensorBoard
 from keras.models import Model
 from matplotlib import pyplot as plt
-from gaps_dataset import gaps
-from DataLoader import load_gaps_crack_images, load_gaps, load_gaps_cut
-import time
 import os
 
 
@@ -32,10 +26,10 @@ class AutoEncoder:
             if weights_path is None:
                 raise ValueError(
                     "weights_path must has a value if pre-trained is true")
-            if os.path.exists(weights_path+"_encoder.h5"):
-                self.encoder.load_weights(weights_path+"_encoder.h5")
-                self.decoder.load_weights(weights_path+"_decoder.h5")
-                self.auto_encoder.load_weights(weights_path+"_autoencoder.h5")
+            if os.path.exists(weights_path + "_encoder.h5"):
+                self.encoder.load_weights(weights_path + "_encoder.h5")
+                self.decoder.load_weights(weights_path + "_decoder.h5")
+                self.auto_encoder.load_weights(weights_path + "_autoencoder.h5")
             else:
                 raise ValueError("path is not exist")
 
@@ -44,7 +38,7 @@ class AutoEncoder:
         layer_name = "encoder_stage%d_%s_%d"
         _x = Conv2D(filter, kernel_size, padding='same',
                     name=layer_name % (stage, 'conv', 0))(x)
-        for i in range(1, conv_layer+1):
+        for i in range(1, conv_layer + 1):
             x = Conv2D(filter, kernel_size, padding='same', kernel_initializer="normal",
                        name=layer_name % (stage, 'conv', i))(x)
             x = BatchNormalization()(x)
@@ -151,9 +145,9 @@ class AutoEncoder:
         return self.encoder, self.decoder, self.auto_encoder
 
     def save_weights(self, weights_name):
-        self.encoder.save_weights(weights_name+"_encoder.h5")
-        self.decoder.save_weights(weights_name+"_decoder.h5")
-        self.auto_encoder.save_weights(weights_name+"_autoencoder.h5")
+        self.encoder.save_weights(weights_name + "_encoder.h5")
+        self.decoder.save_weights(weights_name + "_decoder.h5")
+        self.auto_encoder.save_weights(weights_name + "_autoencoder.h5")
 
 
 def main(weights_name, epochs=100, pre_trained=False):
@@ -162,7 +156,3 @@ def main(weights_name, epochs=100, pre_trained=False):
     Auto_Encoder.train(epochs=epochs)
     Auto_Encoder.test_model()
     Auto_Encoder.save_weights(weights_name)
-
-
-if __name__ == "__main__":
-    main('models/train_1122_1', 20, False)

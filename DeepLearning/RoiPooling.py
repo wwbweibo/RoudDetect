@@ -1,6 +1,7 @@
-from keras.engine.topology import Layer
 import keras.backend as K
-import tensorflow as tf 
+import tensorflow as tf
+from keras.engine.topology import Layer
+
 
 class RoiPooling(Layer):
     def __init__(self, pool_size, num_rois, **kwargs):
@@ -15,7 +16,7 @@ class RoiPooling(Layer):
         return None, self.num_rois, self.pool_size, self.pool_size, self.nb_channels
 
     def call(self, x, mask=None):
-        assert(len(x) == 2)
+        assert (len(x) == 2)
 
         img = x[0]
         rois = x[1]
@@ -28,13 +29,13 @@ class RoiPooling(Layer):
             y = rois[0, roi_idx, 1]
             w = rois[0, roi_idx, 2]
             h = rois[0, roi_idx, 3]
-            
+
             row_length = w / float(self.pool_size)
             col_length = h / float(self.pool_size)
 
             num_pool_regions = self.pool_size
 
-            #NOTE: the RoiPooling implementation differs between theano and tensorflow due to the lack of a resize op
+            # NOTE: the RoiPooling implementation differs between theano and tensorflow due to the lack of a resize op
             # in theano. The theano implementation is much less efficient and leads to long compile times
 
             x = K.cast(x, 'int32')
@@ -42,7 +43,7 @@ class RoiPooling(Layer):
             w = K.cast(w, 'int32')
             h = K.cast(h, 'int32')
 
-            rs = tf.image.resize_images(img[:, y:y+h, x:x+w, :], (self.pool_size, self.pool_size))
+            rs = tf.image.resize_images(img[:, y:y + h, x:x + w, :], (self.pool_size, self.pool_size))
             outputs.append(rs)
 
         final_output = K.concatenate(outputs, axis=0)

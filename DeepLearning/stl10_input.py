@@ -1,12 +1,11 @@
 from __future__ import print_function
 
-import sys
+import errno
+import matplotlib.pyplot as plt
+import numpy as np
 import os
 import sys
 import tarfile
-import errno
-import numpy as np
-import matplotlib.pyplot as plt
 
 if sys.version_info >= (3, 0, 0):
     import urllib.request as urllib  # ugly but works
@@ -130,6 +129,7 @@ def download_and_extract():
             sys.stdout.write('\rDownloading %s %.2f%%' % (filename,
                                                           float(count * block_size) / float(total_size) * 100.0))
             sys.stdout.flush()
+
         filepath, _ = urllib.urlretrieve(
             DATA_URL, filepath, reporthook=_progress)
         print('Downloaded', filename)
@@ -150,7 +150,7 @@ def save_images(images, labels):
         filename = directory + str(i)
         print(filename)
         save_image(image, filename)
-        i = i+1
+        i = i + 1
 
 # if __name__ == "__main__":
 #     # download data if needed

@@ -1,15 +1,14 @@
 """
 fast-rcnn 中分类器的定义
 """
-from keras.layers import TimeDistributed, Convolution2D, Activation, BatchNormalization
 from keras.layers import AveragePooling2D, Flatten, Dense
+from keras.layers import TimeDistributed, Convolution2D, Activation, BatchNormalization
 from keras.layers.merge import Add
 
 from RoiPooling import RoiPooling
 
 
 def conv_block_td(input_tensor, kernel_size, filters, stage, block, input_shape, strides=(2, 2), trainable=True):
-
     # conv block time distributed
 
     nb_filter1, nb_filter2, nb_filter3 = filters
@@ -49,7 +48,6 @@ def conv_block_td(input_tensor, kernel_size, filters, stage, block, input_shape,
 
 
 def identity_block_td(input_tensor, kernel_size, filters, stage, block, trainable=True):
-
     # identity block time distributed
 
     nb_filter1, nb_filter2, nb_filter3 = filters
@@ -104,6 +102,6 @@ def classifer(base_input, input_rois, num_rois, nb_classes=2, trainable=False):
     out_class = TimeDistributed(Dense(nb_classes, activation='softmax',
                                       kernel_initializer='zero'), name='dense_class_{}'.format(nb_classes))(out)
     # note: no regression target for bg class
-    out_regr = TimeDistributed(Dense(4 * (nb_classes-1), activation='linear',
+    out_regr = TimeDistributed(Dense(4 * (nb_classes - 1), activation='linear',
                                      kernel_initializer='zero'), name='dense_regress_{}'.format(nb_classes))(out)
     return [out_class, out_regr]
