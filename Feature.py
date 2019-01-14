@@ -1,5 +1,5 @@
-import numpy as np
 import cv2 as cv
+import numpy as np
 from matplotlib import pyplot as plt
 
 
@@ -29,7 +29,7 @@ def get_area_pos(img, filter_size=1000, flag=False):
             x, y, w, h = cv.boundingRect(con)
 
             result_list.append((area, x, y, w, h))
-            if w/h > 1:
+            if w / h > 1:
                 print("横向裂缝")
                 print(find_min_max_width(con))
             else:
@@ -96,7 +96,7 @@ def find_min_max_width(contour):
             if min_width > (max_dict[pt[0][0]] - min_dict[pt[0][0]]):
                 min_width = max_dict[pt[0][0]] - min_dict[pt[0][0]]
                 min_pos = pt[0][0]
-    return max_width,min_width
+    return max_width, min_width
 
 
 def find_min_max_width_vertical(contour):
@@ -125,4 +125,4 @@ def find_min_max_width_vertical(contour):
             if min_width > (max_dict[pt[0][1]] - min_dict[pt[0][1]]):
                 min_width = max_dict[pt[0][1]] - min_dict[pt[0][1]]
                 min_pos = pt[0][0]
-    return max_width,min_width
+    return max_width, min_width

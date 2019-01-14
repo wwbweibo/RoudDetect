@@ -231,4 +231,3 @@ def hist_segmentation(img):
     min_index = np.where(mask == min(mask))
     ret, new_im = cv.threshold(img, min_index[0][0], 255, cv.THRESH_BINARY)
     return new_im
-

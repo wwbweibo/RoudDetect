@@ -1,10 +1,11 @@
 """
 contains some function that using to load datasets
 """
+import os
+
 import cv2
 import keras.utils
 import numpy as np
-import os
 from gaps_dataset import gaps
 from stl10_input import read_all_images, read_labels
 
@@ -18,21 +19,22 @@ def load_gaps():
     return x, y
 
 
-def load_stl10_data():
+def load_stl10_data(is_keras=False):
     """
     a functio to load stl_10 binary dataset
     the dataset save in ```stl10_binary``` folder
     """
     x = read_all_images('stl10_binary/train_X.bin')
     y = read_labels('stl10_binary/train_y.bin')
-    y = y - 1
-    y = keras.utils.to_categorical(y, num_classes=10)
+    if is_keras:
+        y = y - 1
+        y = keras.utils.to_categorical(y, num_classes=10)
 
     val_x = read_all_images('stl10_binary/test_X.bin')
     val_y = read_labels('stl10_binary/test_y.bin')
-
-    val_y = val_y - 1
-    val_y = keras.utils.to_categorical(val_y, 10)
+    if is_keras:
+        val_y = val_y - 1
+        val_y = keras.utils.to_categorical(val_y, 10)
     return (x, y), (val_x, val_y)
 
 
@@ -86,9 +88,15 @@ def read_image_info(file_path):
         data = line.split()
         filename = data[0]
         annotation = data[1:]
+        anno_list = []
+        for anno in annotation:
+            pos = anno.split(',')
+            for idx, item in enumerate(pos):
+                pos[idx] = int(item)
+            anno_list.append(pos)
         file_list.append(filename)
-        annotation_list.append(annotation)
-    return file_list, annotation_list
+        annotation_list.append(anno_list)
+    return np.asarray(file_list), np.asarray(annotation_list)
 
 
 def load_train_image(file_path='images/train_set_image.npy'):

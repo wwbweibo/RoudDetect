@@ -3,9 +3,10 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/DeepLearning/CrackForest-dataset" />
-      <excludeFolder url="file://$MODULE_DIR$/DeepLearning/SDNET2018" />
-      <excludeFolder url="file://$MODULE_DIR$/autoencoder" />
+      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/DeepLearning/images" />
+      <excludeFolder url="file://$MODULE_DIR$/DeepLearning/logs" />
+      <excludeFolder url="file://$MODULE_DIR$/DeepLearning/models" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

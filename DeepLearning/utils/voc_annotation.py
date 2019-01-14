@@ -22,7 +22,7 @@ def convert_annotation(year, image_id, list_file):
         xmlbox = obj.find('bndbox')
         b = (int(xmlbox.find('xmin').text), int(xmlbox.find('ymin').text), int(xmlbox.find('xmax').text),
              int(xmlbox.find('ymax').text))
-        list_file.write(" " + ",".join([str(a) for a in b]) + ',' + str(cls_id))
+        list_file.write('images/train_set/%s.jpg' % image_id + "," + ",".join([str(a) for a in b]) + ',' + cls + "\n")
 
 
 wd = getcwd()
@@ -31,7 +31,6 @@ for year, image_set in sets:
     image_ids = open('images/train_set/image_list.txt').read().strip().split()
     list_file = open('%s_%s.txt' % (year, image_set), 'w')
     for image_id in image_ids:
-        list_file.write('images/train_set/%s.jpg' % (image_id))
+        # list_file.write('images/train_set/%s.jpg' % (image_id))
         convert_annotation(year, image_id, list_file)
-        list_file.write('\n')
     list_file.close()

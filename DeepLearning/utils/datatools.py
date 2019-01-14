@@ -1,5 +1,6 @@
-import numpy as np
 import random
+
+import numpy as np
 
 
 def get_img_output_length(width, height):
@@ -33,7 +34,7 @@ def calc_rpn(C, img_data, width, height, resized_width, resized_height, img_leng
     y_is_box_valid = np.zeros((output_height, output_width, num_anchors))
     y_rpn_regr = np.zeros((output_height, output_width, num_anchors * 4))
 
-    num_bboxes = len(img_data['bboxes'])
+    num_bboxes = len(img_data[1])
 
     num_anchors_for_bbox = np.zeros(num_bboxes).astype(int)
     best_anchor_for_bbox = -1 * np.ones((num_bboxes, 4)).astype(int)
@@ -44,12 +45,12 @@ def calc_rpn(C, img_data, width, height, resized_width, resized_height, img_leng
     # get the GT box coordinates, and resize to account for image resizing
     # convert the label bbox to resized image, just change the ratio according to resize/original_size
     gta = np.zeros((num_bboxes, 4))
-    for bbox_num, bbox in enumerate(['bboxes']):
+    for bbox, bbox_num in zip(img_data[1], range(len(img_data[1]))):
         # get the GT box coordinates, and resize to account for image resizing
-        gta[bbox_num, 0] = bbox['x1'] * (resized_width / float(width))
-        gta[bbox_num, 1] = bbox['x2'] * (resized_width / float(width))
-        gta[bbox_num, 2] = bbox['y1'] * (resized_height / float(height))
-        gta[bbox_num, 3] = bbox['y2'] * (resized_height / float(height))
+        gta[bbox_num, 0] = bbox[bbox_num][0] * (resized_width / float(width))
+        gta[bbox_num, 1] = bbox[bbox_num][1] * (resized_width / float(width))
+        gta[bbox_num, 2] = bbox[bbox_num][2] * (resized_height / float(height))
+        gta[bbox_num, 3] = bbox[bbox_num][3] * (resized_height / float(height))
 
     # rpn ground truth
     # iterate anchor size and ratio, get all possiable RPNs
@@ -103,7 +104,7 @@ def calc_rpn(C, img_data, width, height, resized_width, resized_height, img_leng
                             tw = np.log((gta[bbox_num, 1] - gta[bbox_num, 0]) / (x2_anc - x1_anc))
                             th = np.log((gta[bbox_num, 3] - gta[bbox_num, 2]) / (y2_anc - y1_anc))
 
-                        if img_data['bboxes'][bbox_num]['class'] != 'bg':
+                        if img_data[1][0][bbox_num][4] == 0:
 
                             # all GT boxes should be mapped to an anchor box, so we keep track of which anchor box was best
                             if curr_iou > best_iou_for_bbox[bbox_num]:
@@ -191,6 +192,9 @@ def calc_rpn(C, img_data, width, height, resized_width, resized_height, img_leng
 
     y_rpn_cls = np.concatenate([y_is_box_valid, y_rpn_overlap], axis=1)
     y_rpn_regr = np.concatenate([np.repeat(y_rpn_overlap, 4, axis=1), y_rpn_regr], axis=1)
+
+    y_rpn_cls = np.transpose(y_rpn_cls, (0, 2, 3, 1))
+    y_rpn_regr = np.transpose(y_rpn_regr, (0, 2, 3, 1))
 
     return np.copy(y_rpn_cls), np.copy(y_rpn_regr)
 

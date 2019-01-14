@@ -2,9 +2,8 @@ __pycache__/
 .ipynb_checkpoints/
 .vscode/
 CrackForest-dataset/
+images/
+logs/
 train/
 models/
-*ipynb 
-logs/
-image.zip
-images/
+*.h5

@@ -1,11 +1,10 @@
 # coding:utf-8
 import time
-import Feature
+
 import cv2 as cv
 from matplotlib import pyplot as plt
-import numpy as np
 
-
+import Feature
 import PreProcess
 import RegionGrow
 
@@ -32,7 +31,7 @@ if __name__ == "__main__":
         plt.show()
         # img = PreProcess.binary_image(img, 100, True)
         img = PreProcess.med_blur(img, ksize=3, flag=False)
-        plt.imsave("a.jpg",img,cmap='gray')
+        plt.imsave("a.jpg", img, cmap='gray')
         # img = cv.dilate(img, np.array([[1,1,1],[1,1,1],[1,1,1]]))
         result, imgs = Feature.connected_region_label(img, flag=False)
         for img in imgs[1:]:
@@ -53,4 +52,4 @@ if __name__ == "__main__":
         plt.imshow(origin)
         plt.title("识别结果")
         plt.show()
-        plt.imsave( "b.jpg",origin)
+        plt.imsave("b.jpg", origin)
